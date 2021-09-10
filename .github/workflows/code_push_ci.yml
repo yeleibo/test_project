@@ -1,0 +1,49 @@
+# 触发条件
+on: [pull_request]
+name: code_push
+jobs:
+  build: 
+    name: Code Push
+    #运行的环境
+    runs-on: ubuntu-latest
+    steps:
+    # 迁出项目
+    - uses: actions/checkout@v2
+    # 安装flutter环境
+    - uses: subosito/flutter-action@v1.4.0
+      with: 
+            flutter-version: 1.22.1
+    - name: Clean Code
+      run: flutter clean
+    # 安装项目依赖
+    - name: Install Dependencies
+      run: flutter packages get
+    # 创建模板代码
+    - name: auto creat code
+      run: flutter pub run build_runner build --delete-conflicting-outputs
+    # 代码的格式化
+    - name: Format Code
+      run: flutter format  lib
+#     代码规范分析
+    - name: Analyze Code
+      run: flutter analyze lib
+    # 运行测试案例
+    - name: Run tests
+      run: flutter test
+    # 检查测试覆盖率
+    - name: Check Code Coverage
+      uses: ChicagoFlutter/lcov-cop@v1.0.0
+      with:
+        path: todos_flutter/coverage/lcov.info
+        min_coverage: 80 #最低覆盖率
+        exclude: "**/*.g.dart **/l10n/*.dart"
+    # 上传测试覆盖率到Codecov上
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v1
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }}
+    # 构建安装包
+    - name: Create a Release APK
+      run: flutter build apk --debug --flavor xiaomi
+    
+

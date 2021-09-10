@@ -1,0 +1,1 @@
+flutter pub run app_base_framework:app_init

@@ -1,0 +1,43 @@
+
+name: master_ci
+
+on:
+  push:
+    branches: master
+    paths:
+      - "/todos_flutter/**"
+      - ".github/workflows/**"
+jobs:
+  build:
+    defaults:
+      run:
+        working-directory: todos_flutter
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: subosito/flutter-action@v1.4.0
+      - name: Install Dependencies
+        run: flutter packages get
+      - name: Format
+        run: flutter format lib
+      - name: Analyze
+        run: flutter analyze lib
+      - name: Run tests
+        run: flutter test --no-pub --coverage --test-randomize-ordering-seed random
+      - name: Check Code Coverage
+        uses: ChicagoFlutter/lcov-cop@v1.0.0
+        with:
+          path: todos_flutter/coverage/lcov.info
+          min_coverage: 60
+          exclude: "**/*.g.dart **/l10n/*.dart"
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+      - uses: actions/setup-ruby@v1
+        with:
+          ruby-version: '>= 2.6'
+      - uses: maierj/fastlane-action@v2.0.0
+        with:
+          lane: 'beta'
+          subdirectory: 'android'
