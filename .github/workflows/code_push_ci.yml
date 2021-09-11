@@ -31,17 +31,17 @@ jobs:
     - name: Run tests
       run: flutter test
     # 检查测试覆盖率
-    - name: Check Code Coverage
-      uses: ChicagoFlutter/lcov-cop@v1.0.0
-      with:
-        path: todos_flutter/coverage/lcov.info
-        min_coverage: 0 #最低覆盖率
-        exclude: "**/*.g.dart **/l10n/*.dart"
-    # 上传测试覆盖率到Codecov上
-    - name: Upload coverage to Codecov
-      uses: codecov/codecov-action@v1
-      with:
-        token: ${{ secrets.CODECOV_TOKEN }}
+#    - name: Check Code Coverage
+#      uses: ChicagoFlutter/lcov-cop@v1.0.0
+#      with:
+#        path: todos_flutter/coverage/lcov.info
+#        min_coverage: 0 #最低覆盖率
+#        exclude: "**/*.g.dart **/l10n/*.dart"
+#    # 上传测试覆盖率到Codecov上
+#    - name: Upload coverage to Codecov
+#      uses: codecov/codecov-action@v1
+#      with:
+#        token: ${{ secrets.CODECOV_TOKEN }}
     # 构建安装包
     - name: Create a Release APK
       run: flutter build apk --debug --flavor xiaomi
