@@ -45,5 +45,15 @@ jobs:
     # 构建安装包
     - name: Create a Release APK
       run: flutter build apk --debug --flavor xiaomi
+    #安装ruby
+    - name: install Ruby
+      uses: actions/setup-ruby@v1
+      with:
+        ruby-version: '2.7.2'
+    -name : userfastlame
+      uses: maierj/fastlane-action@v2.0.0
+      with:
+        lane: 'beta'
+        subdirectory: 'android'
     
 
