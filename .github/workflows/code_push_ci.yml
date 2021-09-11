@@ -44,7 +44,7 @@ jobs:
 #        token: ${{ secrets.CODECOV_TOKEN }}
     # 构建安装包
     - name: Create a Release APK
-      run: flutter build apk --debug --flavor xiaomi
+      run: flutter build apk 
     #安装ruby
     - name: install Ruby
       uses: actions/setup-ruby@v1
